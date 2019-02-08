@@ -1,33 +1,25 @@
 import React, { Component } from 'react'
-
+import ComponentOption from './components/ComponentOption'
 class ComponentList extends Component {
 
     render () {
-        const features = Object.keys(this.props.features)
-                                .map(key => {
-                                const options = this.props.features[key].map((item, index) => {
-                                    const selectedClass = item.name === this.props.selected[key].name ? 'feature__selected' : '';
-                                    const featureClass = 'feature__option ' + selectedClass;
-                                    return <li key={index} className="feature__item">
-                                                <div className={featureClass}
-                                                     onClick={e => this.updateFeature(key, item)}>
-                                                    { item.name }
-                                                ({ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'})
-                                                .format(item.cost) })
-                                                </div>
-                                            </li>
-        });
-
-        return <div className="feature" key={key}>
+        return (
+            <div className="feature" key={key}>
             <div className="feature__name">{key}</div>
             <ul className="feature__list">
-                { Object.keys(this.props.features).map(key => {
-                    <ComponentOption />
-                }) }
+            { Object.keys(this.props.features).map(key => 
+                {this.props.features[key].map((item, index)=>
+                    { <ComponentOption 
+                        key= {index} 
+                        id= {index} 
+                        item= {item} 
+                        selected ={props.selected[key]} 
+                        updateFeature ={this.props.updateFeature} /> })
+                })
+            }
             </ul>
-        </div>
-        });
-    
+        </div>)
+    }
 }
 
 export default ComponentList
