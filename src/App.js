@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Header from './Components/Header';
 import ComponentList from './Components/ComponentList';
+import ComponentSelected from './Components/ComponentSelected'
+import TotalPrice from './Components/TotalPrice';
 
 class App extends Component {
   constructor(props){
@@ -28,7 +30,9 @@ class App extends Component {
     }
   }
 
-  updateFeature(feature, newValue) {
+  updateFeature = (feature, newValue) => {
+    console.log('This is Feature:' + feature);
+    console.log('This is newVal:' + newValue.name + newValue.cost);
     const selected = Object.assign({}, this.state.selected);
     selected[feature] = newValue;
     this.setState({
@@ -37,37 +41,18 @@ class App extends Component {
   }
 
   render() {
-    const summary = Object.keys(this.state.selected)
-          .map(key => <div className="summary__option" key={key}>
-            <div className="summary__option__label">{key}  </div>
-            <div className="summary__option__value">{this.state.selected[key].name}</div>
-            <div className="summary__option__cost">
-              { new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'})
-                  .format(this.state.selected[key].cost) }
-            </div>
-        </div>)
-
-    const total = Object.keys(this.state.selected)
-          .reduce((acc, curr) => acc + this.state.selected[curr].cost, 0);    
-
-
-      
-
     return (
       <div className="App">
         <Header />      
-        <main>
-          <ComponentList features={this.props.features} selected={this.state.selected} />
+        <main>          
+          <section className="main__form">
+            <h3>TECH SPECS AND CUSTOMIZATIONS</h3>
+            <ComponentList features={this.props.features} selected={this.state.selected} updateFeature={this.updateFeature}/>
+          </section> 
           <section className="main__summary">
             <h3>NEW GREENLEAF 2018</h3>
-            {summary}
-            <div className="summary__total">
-              <div className="summary__total__label">Your Price: </div>
-              <div className="summary__total__value">
-              { new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD'})
-                  .format(total) }
-              </div>
-            </div>
+            <ComponentSelected selected={this.state.selected} />
+            <TotalPrice selected={this.state.selected} />
           </section>
         </main>
       </div>
